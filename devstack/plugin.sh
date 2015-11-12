@@ -52,10 +52,10 @@ if is_service_enabled taas; then
         elif [[ "$2" == "install" ]]; then
             install_taas
             configure_taas_plugin
-        elif [[ "$2" == "extra" ]]; then
-            :
         elif [[ "$2" == "post-config" ]]; then
             neutron-db-manage --subproject tap-as-a-service upgrade head
+        elif [[ "$2" == "extra" ]]; then
+            :
         fi
     elif [[ "$1" == "unstack" ]]; then
         :
@@ -68,10 +68,11 @@ if is_service_enabled taas_openvswitch_agent; then
             :
         elif [[ "$2" == "install" ]]; then
             install_taas
-        elif [[ "$2" == "extra" ]]; then
-            :
         elif [[ "$2" == "post-config" ]]; then
             configure_taas_openvswitch_agent
+        elif [[ "$2" == "extra" ]]; then
+            # NOTE(yamamoto): This agent should be run after ovs-agent
+            # sets up its bridges.  (bug 1515104)
             start_taas_openvswitch_agent
         fi
     elif [[ "$1" == "unstack" ]]; then
